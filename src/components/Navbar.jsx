@@ -134,7 +134,10 @@ const NavBar = () => {
             </Link>
         </Flex>
         <Flex>
-        <ColorModeSwitcher justifySelf="flex-end" />
+          <Flex>
+          <ColorModeSwitcher justifySelf="flex-end" />
+<Text>Display</Text>
+          </Flex>
 
         </Flex>
     </Flex>

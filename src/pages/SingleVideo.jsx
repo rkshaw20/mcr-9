@@ -11,25 +11,27 @@ import {
   ModalContent,
   ModalFooter,
   ModalOverlay,
+  Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useDataContext } from '../context/DataContextProvider';
 import {
+  MdDelete,
+  MdEdit,
   MdPlaylistAdd,
-  PiNotePencilDuotone,
   MdWatchLater,
 } from 'react-icons/md';
 import { AiFillEdit } from 'react-icons/ai';
 import { useState } from 'react';
 import PlaylistModal from '../components/PlaylistModal';
 import { TYPE } from '../utils/constants';
-import VideoPlayer, { isWatchList } from '../utils/utils';
+import  { isWatchList } from '../utils/utils';
 import SinglePlaylistModal from '../components/SinglePlaylistModal';
 
 const SingleVideo = () => {
   const { videoId } = useParams();
-  const { videos, watchLater, playlist, dispatch } = useDataContext();
+  const { videos, watchLater, playlist,notes, dispatch } = useDataContext();
   const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
   const [input, setInput] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -61,12 +63,29 @@ const SingleVideo = () => {
   const handleAddNotes = () => {
     onOpen();
   };
+  const isNotePresent=notes?.find((note)=>note.id===videoData._id);
 
   const handleNoteSubmit = e => {
     e.preventDefault();
-    
+    if(isNotePresent){
+      dispatch({type:TYPE.UPDATE_NOTE,payload:{id:videoData._id,text:input}})
+    }else{
+      dispatch({type:TYPE.ADD_NOTE, payload:{id:videoData._id,text:input}})
+    }
+    onClose();
   };
-
+  const handleNoteEdit = note => {
+    setInput(note.text);
+    onOpen();
+  };
+  
+  const handleNoteDelete = note => {
+    dispatch({
+      type: TYPE.DELETE_NOTE,
+      payload: note.id,
+    });
+  };
+  
   return (
     <Flex h="full">
       <Flex flexDir="column" m="1rem">
@@ -108,6 +127,7 @@ const SingleVideo = () => {
                   <ModalBody>
                     <Input
                       isRequired
+                      value={input}
                       onChange={e => setInput(e.target.value)}
                     />
                   </ModalBody>
@@ -127,8 +147,18 @@ const SingleVideo = () => {
           </Flex>
         </Flex>
         <Divider />
-        <Flex>
+        <Flex flexDir='column'  >
           <Heading>Notes</Heading>
+          <Flex>
+          {notes.filter(note => note.id === videoData._id).map((note)=>(
+            <Flex key={note.id} w='full' justifyContent='space-between' h='3rem' > <Text size='md' >{note.text}</Text>
+            <Flex gap={2} >
+            <Icon as={MdEdit} onClick={() => handleNoteEdit(note)} />
+          <Icon as={MdDelete} onClick={() => handleNoteDelete(note)} />
+            </Flex>
+            </Flex>
+    ))}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
@@ -136,11 +166,3 @@ const SingleVideo = () => {
 };
 export default SingleVideo;
 
-// _id: 25,
-// title: 'Origami Crane Mobile - DIY Home Decor',
-// views: 2251,
-// chips: ['origami', 'crane', 'mobile', 'paper', 'home decor'],
-// thumbnail: 'https://picsum.photos/301/174',
-// src: 'https://www.youtube.com/embed/GBIIQ0kP15E',
-// category: 'Origami',
-// creator: 'HomeCraftHacks',
