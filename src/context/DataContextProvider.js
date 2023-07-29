@@ -1,18 +1,28 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useReducer, useState } from 'react';
+import { DataReducer, dataInitialState } from '../reducer/DataReducer';
 
-const DataContext=createContext({
-    data:''
-})
+const DataContext = createContext({
+  categories: [],
+  videos: [],
+  watchLater: [],
+});
 
-export const useDataContext=()=>useContext(DataContext);
+export const useDataContext = () => useContext(DataContext);
 
-const DataContextProvider=({children})=>{
-    const [data,setData]=useState('');
-    return(
-        <DataContext.Provider value={{data,setData}}>
-            {children}
-        </DataContext.Provider>
-    )
-}
+const DataContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(DataReducer, dataInitialState);
+  return (
+    <DataContext.Provider
+      value={{
+        categories: state.categories,
+        videos: state.videos,
+        watchLater: state.watchLater,
+        dispatch,
+      }}
+    >
+      {children}
+    </DataContext.Provider>
+  );
+};
 
-export default DataContextProvider
+export default DataContextProvider;
