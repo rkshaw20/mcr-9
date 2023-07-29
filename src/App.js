@@ -16,6 +16,7 @@ import SingleVideo from './pages/SingleVideo';
 import Explore from './pages/Explore';
 import Playlist from './pages/Playlist';
 import CategoryPage from './pages/CategoryPage';
+import SinglePlaylist from './pages/SinglePlaylist';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
       {path:'/exlpore', element:<Explore/>},
       {path:'/home/:categoryName', element:<CategoryPage/>},
       {path:'/playlist', element:<Playlist/>},
+      {path:'/playlist/:playlistId', element:<SinglePlaylist/>},
 
       {path:'/watchLater', element:<WatchLater/>},
       {path:'/video/:videoId', element:<SingleVideo/>}

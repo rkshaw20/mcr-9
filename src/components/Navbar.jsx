@@ -2,6 +2,7 @@ import { Flex, Icon, Link, Text, useColorModeValue } from "@chakra-ui/react";
 import { NavLink as ReachLink } from 'react-router-dom';
 import {AiFillHome } from 'react-icons/ai';
 import {MdExplore,MdPlaylistAdd,MdWatchLater } from 'react-icons/md';
+import { ColorModeSwitcher } from "../ColorModeSwitcher";
 
 
 const NavBar = () => {
@@ -131,6 +132,10 @@ const NavBar = () => {
                 Watch Later
               </Text>
             </Link>
+        </Flex>
+        <Flex>
+        <ColorModeSwitcher justifySelf="flex-end" />
+
         </Flex>
     </Flex>
   );

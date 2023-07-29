@@ -5,6 +5,7 @@ const DataContext = createContext({
   categories: [],
   videos: [],
   watchLater: [],
+  playlist:[],
 });
 
 export const useDataContext = () => useContext(DataContext);
@@ -17,6 +18,7 @@ const DataContextProvider = ({ children }) => {
         categories: state.categories,
         videos: state.videos,
         watchLater: state.watchLater,
+        playlist:state.playlist,
         dispatch,
       }}
     >

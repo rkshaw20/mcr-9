@@ -1,7 +1,9 @@
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
+  CardHeader,
   Flex,
   Heading,
   Icon,
@@ -15,39 +17,49 @@ import { useDataContext } from '../context/DataContextProvider';
 import { TYPE } from '../utils/constants';
 import { isWatchList } from '../utils/utils';
 
-const VideoCard = ({ video }) => {
+const VideoCard = ({ video,isPlaylistPage,playlistId }) => {
   const { watchLater, dispatch } = useDataContext();
- 
-//   const removeFromWatchLater = () => {};
 
   const isInWatchLater = isWatchList(watchLater, video._id);
 
-  const HandleAddToWatchLater = () => {
+  const handleAddToWatchLater = () => {
     isInWatchLater
-      ? dispatch({ type: TYPE.REMOVE_FROM_WATCH_LATER,payload:video })
-      : dispatch({type:TYPE.ADD_TO_WATCH_LATER,payload:video});
+      ? dispatch({ type: TYPE.REMOVE_FROM_WATCH_LATER, payload: video })
+      : dispatch({ type: TYPE.ADD_TO_WATCH_LATER, payload: video });
+  };
+
+  const handleDeleteVideoFromPlaylist = (playlistId, videoId) => {
+    dispatch({
+      type: TYPE.REMOVE_FROM_PLAYLIST,
+      payload: { playlistId, videoId },
+    });
   };
 
   return (
     <Card w="300px">
-        <CardBody>
-          <Image
-            src={video?.thumbnail}
-            alt={video?.title}
-            h="200px"
-            w="280px"
-            position="relative"
-          />
-          <Icon
-            as={MdWatchLater}
-            boxSize="2.5rem"
-            position="absolute"
-            top="1.2rem"
-            right="1rem"
-            onClick={()=>HandleAddToWatchLater()}
-          />
-        </CardBody>
-        <Link as={ReachLink} to={`/video/${video._id}`}>
+      {isPlaylistPage && <CardHeader>
+        
+        <Button onClick={()=>handleDeleteVideoFromPlaylist(playlistId,video._id)} >Remove From Playlist</Button>
+      </CardHeader>}
+      
+      <CardBody>
+        <Image
+          src={video?.thumbnail}
+          alt={video?.title}
+          h="200px"
+          w="280px"
+          position="relative"
+        />
+        <Icon
+          as={MdWatchLater}
+          boxSize="2.5rem"
+          position="absolute"
+          top="1.2rem"
+          right="1rem"
+          onClick={() => handleAddToWatchLater()}
+        />
+      </CardBody>
+      <Link as={ReachLink} to={`/video/${video._id}`}>
         <CardFooter>
           <Flex>
             <Flex flexDir="column">
